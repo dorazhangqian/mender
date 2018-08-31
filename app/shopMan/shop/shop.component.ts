@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService} from "../../service/http/http.service";
 import {Router} from '@angular/router';
-import {CookieService} from "ngx-cookie-service";
 import { NzMessageService} from 'ng-zorro-antd';
 
 @Component({
@@ -20,13 +19,12 @@ isVisibleMiddle=false;
   phone:string;
   repair:string;
   status:string;
-  constructor(public http:HttpService,public router:Router,public cookieservice:CookieService,public message:NzMessageService) {
+  constructor(public http:HttpService,public router:Router,public message:NzMessageService) {
   }
 
   searchData(): void {
     this.loading = true;
-    console.log(this.cookieservice.get("token"));
-     this.http.httpmender("shopmanagemnet/shopinfolist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"shopname":this.shopname,"phone":this.phone,"repair":this.repair,"status":this.status},this.cookieservice.get("token"))
+     this.http.httpmender("shopmanagemnet/shopinfolist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"shopname":this.shopname,"phone":this.phone,"repair":this.repair,"status":this.status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -50,7 +48,7 @@ isVisibleMiddle=false;
 	  this.router.navigate(["home/shopadd"],{queryParams:{'shopid':item}});
   }
   deleteRow(item:string):void{//删除门店
-  	 this.http.httpmenderdel("shopmanagemnet/deleteshopinfo/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("shopmanagemnet/deleteshopinfo/"+item)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){

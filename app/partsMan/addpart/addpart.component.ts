@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
 import {
@@ -38,7 +37,6 @@ export class AddpartComponent implements OnInit {
   	private httpl:HttpService,
   	private fb: FormBuilder,
   	public rou:Router,
-  	private cookieService:CookieService,
     private sanitizer: DomSanitizer) {
 	  this.router.queryParams.subscribe(Params=>{
 	  	this.parmlen=Object.keys(Params).length;
@@ -46,7 +44,7 @@ export class AddpartComponent implements OnInit {
         });
   	}
   ngOnInit() {
-  	this.httpl.httpmenderget("partsmanagemnet/partsclassify",this.cookieService.get("token"))
+  	this.httpl.httpmenderget("partsmanagemnet/partsclassify")
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -58,7 +56,7 @@ export class AddpartComponent implements OnInit {
   	if(this.parmlen==1){
   		this.pagename='编辑';
   	 /*获取配件分类详情*/
-     this.httpl.httpmenderget("partsmanagemnet/partsinfodetail/"+this.partid,this.cookieService.get("token"))
+     this.httpl.httpmenderget("partsmanagemnet/partsinfodetail/"+this.partid)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -104,7 +102,7 @@ export class AddpartComponent implements OnInit {
     if (this.validateForm.invalid) return;
     if(this.parmlen==1){
     /*编辑配件分类*/
-	  this.httpl.httpmenderput("partsmanagemnet/updatepartsinfo",{"id":this.partid,"classifyid":this.classifyid,"puprice":this.puprice,"status":this.status,"title":this.title,"num":this.num,"stock":this.stock,"diprice":this.diprice,"orprice":this.orprice,"img":this.mkey,"protect":this.protect},this.cookieService.get("token"))
+	  this.httpl.httpmenderput("partsmanagemnet/updatepartsinfo",{"id":this.partid,"classifyid":this.classifyid,"puprice":this.puprice,"status":this.status,"title":this.title,"num":this.num,"stock":this.stock,"diprice":this.diprice,"orprice":this.orprice,"img":this.mkey,"protect":this.protect})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
@@ -114,7 +112,7 @@ export class AddpartComponent implements OnInit {
       	}
       });
     }else{   																																																	
-	  this.httpl.httpmender("partsmanagemnet/addpartsinfo",{"classifyid":this.classifyid,"puprice":this.puprice,"status":this.status,"title":this.title,"num":this.num,"stock":this.stock,"diprice":this.diprice,"orprice":this.orprice,"img":this.mkey,"protect":this.protect},this.cookieService.get("token"))
+	  this.httpl.httpmender("partsmanagemnet/addpartsinfo",{"classifyid":this.classifyid,"puprice":this.puprice,"status":this.status,"title":this.title,"num":this.num,"stock":this.stock,"diprice":this.diprice,"orprice":this.orprice,"img":this.mkey,"protect":this.protect})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');

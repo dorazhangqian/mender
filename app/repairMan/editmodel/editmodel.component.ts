@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
-import {CookieService} from "ngx-cookie-service";
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
@@ -27,48 +26,49 @@ export class EditmodelComponent implements OnInit {
   validateForm: FormGroup;
   pagename:string;
   versionid:number=0;
+  secondaryFaultList:any;
+  secondaryFL:string;
+  faultid:string;
+  faultpid:string;
+  ftitle:string;
+  cost:string;
+  price:string;
+  fee:string;
   constructor(
   	public router:ActivatedRoute,
   	private msg: NzMessageService,
   	private httpl:HttpService,
   	private fb: FormBuilder,
   	public rou:Router,
-  	private cookieService:CookieService,
     private sanitizer: DomSanitizer) {
 	  this.router.queryParams.subscribe(Params=>{
 	  	  this.parmlen=Object.keys(Params).length;
         this.id=Params['id'];
+        this.brandid=Params['brandid'];
         });
   	}
   ngOnInit() {
-  	  this.httpl.httpmenderget("repairmanagemnet/getfaultinfo/"+this.versionid,this.cookieService.get("token"))
+  	  this.httpl.httpmenderget("repairmanagemnet/getfaultinfo/"+this.versionid)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
-//						this.title=data.data.title;
-//						this.describe=data.data.describe;
-//						this.num=data.data.num;
-//						this.brandid=data.data.brandid.toString();
-//						this.colors=data.data.colors;
-//						this.img=data.data.img;
-//						this.status=data.data.status.toString();
+				  this.secondaryFaultList=data.data.SecondaryFaultList;
       	}else{
       		this.msg.error(data.msg);
       	}
       });
-  	if(this.parmlen==1){
+  	if(this.parmlen==2){
   		this.pagename='编辑';
   	 /*获取配件分类详情*/
-     this.httpl.httpmenderget("repairmanagemnet/versiondetail/"+this.id,this.cookieService.get("token"))
+     this.httpl.httpmenderget("repairmanagemnet/versiondetail/"+this.id)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
 						this.title=data.data.title;
 						this.describe=data.data.describe;
 						this.num=data.data.num;
-						this.brandid=data.data.brandid.toString();
 						this.colors=data.data.colors;
-						this.img=data.data.img;
+						this.img=this.imgUrl+data.data.img;
 						this.status=data.data.status.toString();
       	}else{
       		this.msg.error(data.msg);
@@ -85,7 +85,7 @@ export class EditmodelComponent implements OnInit {
       num: [ this.num, [ Validators.required ] ],
       status:[this.status,[ Validators.required ]],
       colors:[this.colors],
-      brandid:[this.brandid],
+      secondaryFL:[this.secondaryFL],
       mkey:[this.mkey],
      });
   }
@@ -97,9 +97,9 @@ export class EditmodelComponent implements OnInit {
       this.validateForm.controls[ i ].updateValueAndValidity();
     }
     if (this.validateForm.invalid) return;
-    if(this.parmlen==1){
+    if(this.parmlen==2){
     /*编辑*/
-	  this.httpl.httpmender("repairmanagemnet/updateversion",{"describe":this.describe,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid},this.cookieService.get("token"))
+	  this.httpl.httpmender("repairmanagemnet/updateversion",{"describe":this.describe,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid,"list":JSON.parse(this.secondaryFL)})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
@@ -110,7 +110,7 @@ export class EditmodelComponent implements OnInit {
       });
     }else{   	
     /*新增*/
-	  this.httpl.httpmender("repairmanagemnet/addversion",{"describe":this.describe,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid},this.cookieService.get("token"))
+	  this.httpl.httpmender("repairmanagemnet/addversion",{"describe":this.describe,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid,"list":JSON.parse(this.secondaryFL)})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');
@@ -120,9 +120,6 @@ export class EditmodelComponent implements OnInit {
       	}
       });
     }
-   
-   
-
   }
 
 

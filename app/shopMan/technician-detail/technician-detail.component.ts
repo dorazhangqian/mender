@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from "@angular/router";
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 import { NzMessageService} from 'ng-zorro-antd';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
@@ -43,7 +42,6 @@ export class TechnicianDetailComponent implements OnInit {
   	public router:Router,
   	public http:HttpService,
   	public msg:NzMessageService,
-  	public cookieService:CookieService,
   	private sanitizer: DomSanitizer
   ) { 
   	 	this.rou.queryParams.subscribe(Params=>{
@@ -56,7 +54,7 @@ export class TechnicianDetailComponent implements OnInit {
   ngOnInit() {
   	if(this.parmlen==2){
   		this.pagename='编辑';
-  	  this.http.httpmenderget("shopmanagemnet/getworkerdetail/"+this.id,this.cookieService.get("token"))
+  	  this.http.httpmenderget("shopmanagemnet/getworkerdetail/"+this.id)
       .subscribe(data=>{
       	if(data.result == '0000'){     		
       		this.name=data.data.workerInfo.name;
@@ -213,7 +211,7 @@ export class TechnicianDetailComponent implements OnInit {
      this.birthday=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
     if(this.parmlen==2){
     /*编辑技师*/
-	  this.http.httpmenderput("shopmanagemnet/updateworkerinfo",{"workid": this.id,"name":this.name,"nickname":this.nickname,"avatar":this.avatarid,"phone":this.phone,"birthday":this.birthday,"sex":this.sex,"email":this.email,"password":this.password,"isboard":this.isboard,"cardid": this.cardid,"cardback": this.cardbackid,"cardface":this.cardfaceid,"cardhold":this.cardholdid,"authorid":this.authorid},this.cookieService.get("token"))
+	  this.http.httpmenderput("shopmanagemnet/updateworkerinfo",{"workid": this.id,"name":this.name,"nickname":this.nickname,"avatar":this.avatarid,"phone":this.phone,"birthday":this.birthday,"sex":this.sex,"email":this.email,"password":this.password,"isboard":this.isboard,"cardid": this.cardid,"cardback": this.cardbackid,"cardface":this.cardfaceid,"cardhold":this.cardholdid,"authorid":this.authorid})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
@@ -224,7 +222,7 @@ export class TechnicianDetailComponent implements OnInit {
       });
     }else{   	
     /*新增技师*/
-	  this.http.httpmender("shopmanagemnet/addworker",{workerInfo:{name:this.name,nickname:this.nickname,avatar:this.avatarid,phone:this.phone,birthday:this.birthday,sex:this.sex,email:this.email,"password":this.password,"isboard":this.isboard},"workerAuthor":{"cardid":this.cardid,"cardback":this.cardbackid,"cardface":this.cardfaceid,"cardhold":this.cardholdid}},this.cookieService.get("token"))
+	  this.http.httpmender("shopmanagemnet/addworker",{workerInfo:{name:this.name,nickname:this.nickname,avatar:this.avatarid,phone:this.phone,birthday:this.birthday,sex:this.sex,email:this.email,"password":this.password,"isboard":this.isboard},"workerAuthor":{"cardid":this.cardid,"cardback":this.cardbackid,"cardface":this.cardfaceid,"cardhold":this.cardholdid}})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');

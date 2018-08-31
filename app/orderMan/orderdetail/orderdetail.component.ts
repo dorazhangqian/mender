@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-orderdetail',
@@ -42,8 +41,7 @@ export class OrderdetailComponent implements OnInit {
   constructor(
   	public router:ActivatedRoute,
   	private msg: NzMessageService,
-  	private httpl:HttpService,
-  	private cookieService:CookieService) {
+  	private httpl:HttpService) {
 	  this.router.queryParams.subscribe(Params=>{
         this.orderno=Params['orderno'];
         this.status=Params['status'];
@@ -51,7 +49,7 @@ export class OrderdetailComponent implements OnInit {
   	}
   ngOnInit() {
   	 /*获取订单详情*/
-     this.httpl.httpmender("ordermanagement/orderdetail",{"orderno":this.orderno,"status":this.status},this.cookieService.get("token"))
+     this.httpl.httpmender("ordermanagement/orderdetail",{"orderno":this.orderno,"status":this.status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){

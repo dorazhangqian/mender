@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService} from "../../service/http/http.service";
 import {Router} from '@angular/router';
-import {CookieService} from "ngx-cookie-service";
 import { NzMessageService} from 'ng-zorro-antd';
 import 'ztree';
 import 'jquery'
@@ -17,17 +16,17 @@ export class FaultlistComponent implements OnInit {
   total = 1;
   dataSet = [];
   loading = true;
-  pid:string='1';
+  pid:string='0';
   title:string;
   status:string;
+  showadd:boolean=true;
   tree:any;
-  constructor(public http:HttpService,public router:Router,public cookieservice:CookieService,public message:NzMessageService) {
+  constructor(public http:HttpService,public router:Router,public message:NzMessageService) {
   }
   searchData(): void {
     this.loading = true;
-     this.http.httpmender("repairmanagemnet/faultlist",{"currentPage":this.pageIndex,"id":this.pid,"pageSize":this.pageSize,"title":this.title,"status":this.status},this.cookieservice.get("token"))
+     this.http.httpmender("repairmanagemnet/faultlist",{"currentPage":this.pageIndex,"id":this.pid,"pageSize":this.pageSize,"title":this.title,"status":this.status})
       .subscribe(data=>{
-      	console.log(data);
       	if(data.result == "0000"){
         this.dataSet=data.data.list;
         this.loading = false;
@@ -42,19 +41,18 @@ export class FaultlistComponent implements OnInit {
   	 this.searchData();
   }
   add(){//新增门店
-  	this.router.navigateByUrl("home/editfault");
+  	this.router.navigate(["home/editfault"],{queryParams:{'pid':this.pid}});
   }
-  EditRow(item:any):void{//编辑门店
-  	console.log(item);
-	  this.router.navigate(["home/editfault"],{queryParams:{'id':item}});
+  EditRow(item:any,item2:any):void{//编辑门店
+	  this.router.navigate(["home/editfault"],{queryParams:{'id':item,'pid':item2}});
   }
   deleteRow(item:string):void{//删除门店
-  	 this.http.httpmenderdel("repairmanagemnet/deletefault/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("repairmanagemnet/deletefault/"+item)
       .subscribe(data=>{
-      	console.log(data);
       	if(data.result == "0000"){
-					this.message.success(data.msg);
+					this.message.success('删除成功!');
 					this.searchData();
+					this.getnodes();
       	}else{
       		this.message.error(data.msg);
       	}
@@ -73,26 +71,32 @@ export class FaultlistComponent implements OnInit {
     callback: {
 		onClick:(event:any,treeId:any,treeNode:any)=>{
 		  this.pid=treeNode.id;
+		  if(treeNode.pid == 0){
+		  	this.showadd=true;
+		  }else{
+		  	this.showadd=false;
+		  }
 		  this.pageIndex = 1;
 		  this.searchData();
 		}
 	  }
   };
 
-  
-  ngOnInit(): void {
-    this.searchData();
-     this.http.httpmenderget("repairmanagemnet/faulttreelist/",this.cookieservice.get("token"))
+  getnodes(){
+  	  this.http.httpmenderget("repairmanagemnet/faulttreelist/")
       .subscribe(data=>{
-      	console.log(data);
       	if(data.result == "0000"){
           this.tree=data.data;
-          console.log(this);
           $.fn.zTree.init($("#ztree"), this.setting, this.tree);
       	}else{
       		this.message.error(data.msg);
       	}
       });
+  }
+  ngOnInit(): void {
+    this.searchData();
+    this.getnodes();
+   
   }
 
 }

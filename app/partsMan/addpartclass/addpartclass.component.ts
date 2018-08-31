@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 import {
   FormBuilder,
   FormGroup,
@@ -29,8 +28,7 @@ export class AddpartclassComponent implements OnInit {
   	private msg: NzMessageService,
   	private httpl:HttpService,
   	private fb: FormBuilder,
-  	public rou:Router,
-  	private cookieService:CookieService) {
+  	public rou:Router) {
 	  this.router.queryParams.subscribe(Params=>{
 	  	  this.parmlen=Object.keys(Params).length;
         this.classid=Params['classid'];
@@ -40,7 +38,7 @@ export class AddpartclassComponent implements OnInit {
   	if(this.parmlen==1){
   		this.pagename='编辑';
   	 /*获取配件分类详情*/
-     this.httpl.httpmenderget("partsmanagemnet/partsclassifydetail/"+this.classid,this.cookieService.get("token"))
+     this.httpl.httpmenderget("partsmanagemnet/partsclassifydetail/"+this.classid)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -74,7 +72,7 @@ export class AddpartclassComponent implements OnInit {
     if (this.validateForm.invalid) return;
     if(this.parmlen==1){
     /*编辑配件分类*/
-	  this.httpl.httpmenderput("partsmanagemnet/updatepartsclassify",{"explain":this.explain,"id": this.classid,"num":this.num,"status":this.status,"title":this.title},this.cookieService.get("token"))
+	  this.httpl.httpmenderput("partsmanagemnet/updatepartsclassify",{"explain":this.explain,"id": this.classid,"num":this.num,"status":this.status,"title":this.title})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
@@ -85,7 +83,7 @@ export class AddpartclassComponent implements OnInit {
       });
     }else{   	
     /*新增配件*/
-	  this.httpl.httpmender("partsmanagemnet/addpartsclassify",{"explain":this.explain,"num":this.num,"status":this.status,"title":this.title},this.cookieService.get("token"))
+	  this.httpl.httpmender("partsmanagemnet/addpartsclassify",{"explain":this.explain,"num":this.num,"status":this.status,"title":this.title})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');

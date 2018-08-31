@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService,imgUrl} from "../../service/http/http.service";
 import {Router} from '@angular/router';
-import {CookieService} from "ngx-cookie-service";
 import { NzMessageService} from 'ng-zorro-antd';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd';
 import 'ztree';
@@ -23,13 +22,14 @@ export class BrandlistComponent implements OnInit {
   type:string;
   status:string;
   imgUrl:string=imgUrl;
+  showadd:boolean=true;
   nodes:any;
   classid:string='0';
-  constructor(public http:HttpService,public router:Router,public cookieservice:CookieService,public message:NzMessageService) {
+  constructor(public http:HttpService,public router:Router,public message:NzMessageService) {
   }
   searchData(): void {
     this.loading = true;
-     this.http.httpmender("repairmanagemnet/brandlist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"id":this.pid,"title":this.title,"type":this.type,"status":this.status},this.cookieservice.get("token"))
+     this.http.httpmender("repairmanagemnet/brandlist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"id":this.pid,"title":this.title,"type":this.type,"status":this.status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -53,6 +53,11 @@ export class BrandlistComponent implements OnInit {
     callback: {
 			onClick:(event:any,treeId:any,treeNode:any)=>{
 		  this.pid=treeNode.id;
+		  if(treeNode.pid == 0){
+		  	this.showadd=true;
+		  }else{
+		  	this.showadd=false;
+		  }
 		  this.pageIndex = 1;
 		  this.searchData();
 		}
@@ -60,7 +65,7 @@ export class BrandlistComponent implements OnInit {
   };
 
   getnodes(){
-  	  this.http.httpmenderget("repairmanagemnet/brandtreelist/",this.cookieservice.get("token"))
+  	  this.http.httpmenderget("repairmanagemnet/brandtreelist/")
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){      	
@@ -81,12 +86,13 @@ export class BrandlistComponent implements OnInit {
 	  this.router.navigate(["home/editbrand"],{queryParams:{'id':item,'pid':this.pid}});
   }
   deleteRow(item:string):void{//删除品牌
-  	 this.http.httpmenderdel("repairmanagemnet/deletebrand/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("repairmanagemnet/deletebrand/"+item)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
 					this.message.success('删除成功!');
 					this.searchData();
+					this.getnodes();
       	}else{
       		this.message.error(data.msg);
       	}

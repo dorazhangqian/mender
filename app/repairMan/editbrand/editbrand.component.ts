@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
-import {CookieService} from "ngx-cookie-service";
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
@@ -32,7 +31,6 @@ export class EditbrandComponent implements OnInit {
   	private httpl:HttpService,
   	private fb: FormBuilder,
   	public rou:Router,
-  	private cookieService:CookieService,
     private sanitizer: DomSanitizer) {
 	  this.router.queryParams.subscribe(Params=>{
 	  	  this.parmlen=Object.keys(Params).length;
@@ -44,7 +42,7 @@ export class EditbrandComponent implements OnInit {
   	if(this.parmlen==2){
   		this.pagename='编辑';
   	 /*获取配件分类详情*/
-     this.httpl.httpmenderget("repairmanagemnet/branddetail/"+this.id,this.cookieService.get("token"))
+     this.httpl.httpmenderget("repairmanagemnet/branddetail/"+this.id)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -52,7 +50,7 @@ export class EditbrandComponent implements OnInit {
 						this.describe=data.data.describe;
 						this.num=data.data.num;
 						this.type=data.data.type.toString();
-						this.img=data.data.img;
+						this.img=this.imgUrl+data.data.img;
 						this.status=data.data.status.toString();
       	}else{
       		this.msg.error(data.msg);
@@ -83,22 +81,22 @@ export class EditbrandComponent implements OnInit {
     if(this.parmlen==2){
     /*编辑*/
 																																										
-	  this.httpl.httpmenderput("repairmanagemnet/updatebrand",{"describe":this.describe,"pid": this.pid,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"type":this.type},this.cookieService.get("token"))
+	  this.httpl.httpmenderput("repairmanagemnet/updatebrand",{"describe":this.describe,"pid": this.pid,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"type":this.type})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
-					this.rou.navigateByUrl("home/model");
+					this.rou.navigateByUrl("home/brand");
       	}else{
       		this.msg.error(data.msg);
       	}
       });
     }else{   	
     /*新增*/																					
-	  this.httpl.httpmender("repairmanagemnet/addbrand",{"describe":this.describe,"num":this.num,"pid": this.pid,"status":this.status,"title":this.title,"img":this.mkey,"type":this.type},this.cookieService.get("token"))
+	  this.httpl.httpmender("repairmanagemnet/addbrand",{"describe":this.describe,"num":this.num,"pid": this.pid,"status":this.status,"title":this.title,"img":this.mkey,"type":this.type})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');
-					this.rou.navigateByUrl("home/model");
+					this.rou.navigateByUrl("home/brand");
       	}else{
       		this.msg.error(data.msg);
       	}

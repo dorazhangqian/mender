@@ -1,7 +1,6 @@
 import {Component, OnInit } from '@angular/core';
 import {HttpService} from "../../service/http/http.service";
 import {Router} from '@angular/router';
-import {CookieService} from "ngx-cookie-service";
 import {NzMessageService} from 'ng-zorro-antd';
 @Component({
   selector: 'app-partclass',
@@ -17,12 +16,12 @@ export class PartclassComponent implements OnInit {
   status:string;
   classifyid:string;
   title:string;
-  constructor(public http:HttpService,public router:Router,public cookieservice:CookieService,public message:NzMessageService) {
+  constructor(public http:HttpService,public router:Router,public message:NzMessageService) {
   }
 
   searchData(): void {
     this.loading = true;
-     this.http.httpmender("partsmanagemnet/partsclassifylist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"title":this.title,"classifyid":this.classifyid,"status":this.status},this.cookieservice.get("token"))
+     this.http.httpmender("partsmanagemnet/partsclassifylist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"title":this.title,"classifyid":this.classifyid,"status":this.status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -42,7 +41,7 @@ export class PartclassComponent implements OnInit {
 	  this.router.navigate(["home/addpartclass"],{queryParams:{'classid':item}});
   }
   deleteRow(item:string):void{//删除配件
-  	 this.http.httpmenderdel("partsmanagemnet/deletepartsclassify/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("partsmanagemnet/deletepartsclassify/"+item)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){

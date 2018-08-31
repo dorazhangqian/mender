@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
 import {
@@ -46,7 +45,7 @@ export class ShopaddComponent implements OnInit {
   /*门店地址级联选择*/
   provinceChangep(value:any): void {
   if(value){
-	this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/"+value.id,this.cookieService.get("token"))
+	this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/"+value.id)
       .subscribe(data=>{
       	if(data.result == '0000'){      	
       		this.cityData=data.data;
@@ -58,7 +57,7 @@ export class ShopaddComponent implements OnInit {
   }
     provinceChangec(value:any): void {
 	  if(value){
-		this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/"+value.id,this.cookieService.get("token"))
+		this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/"+value.id)
 	      .subscribe(data=>{
 	      	if(data.result == '0000'){      		
 	      		this.regionData=data.data;
@@ -153,7 +152,7 @@ export class ShopaddComponent implements OnInit {
       
     if(this.parmlen==1){
     /*编辑门店*/
-	  this.httpl.httpmenderput("shopmanagemnet/editshopinfo",{"address": this.address,"appid":this.appid,"provinceid":this.addressp.id,"cityid":this.addressc.id,"districtid":this.addressr.id,"id":this.shopid,"ispurchase":this.parts,"lat":this.coordinate.split(",")[1],"logo":this.mkey,"lon":this.coordinate.split(",")[0],"name": this.name,"phone": this.phone,"repair":this.maintain,"service":this.service,"status":this.state},this.cookieService.get("token"))
+	  this.httpl.httpmenderput("shopmanagemnet/editshopinfo",{"address": this.address,"appid":this.appid,"provinceid":this.addressp.id,"cityid":this.addressc.id,"districtid":this.addressr.id,"id":this.shopid,"ispurchase":this.parts,"lat":this.coordinate.split(",")[1],"logo":this.mkey,"lon":this.coordinate.split(",")[0],"name": this.name,"phone": this.phone,"repair":this.maintain,"service":this.service,"status":this.state})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -165,7 +164,7 @@ export class ShopaddComponent implements OnInit {
       });
     }else{   	
     /*新增门店*/
-	  this.httpl.httpmender("shopmanagemnet/addshopinfo",{"address": this.address,"appid":this.appid,"provinceid":this.addressp.id,"cityid":this.addressc.id,"districtid":this.addressr.id,"ispurchase":this.parts,"lat":this.coordinate.split(",")[1],"logo":this.mkey,"lon":this.coordinate.split(",")[0],"name": this.name,"phone": this.phone,"repair":this.maintain,"service":this.service,"status":this.state},this.cookieService.get("token"))
+	  this.httpl.httpmender("shopmanagemnet/addshopinfo",{"address": this.address,"appid":this.appid,"provinceid":this.addressp.id,"cityid":this.addressc.id,"districtid":this.addressr.id,"ispurchase":this.parts,"lat":this.coordinate.split(",")[1],"logo":this.mkey,"lon":this.coordinate.split(",")[0],"name": this.name,"phone": this.phone,"repair":this.maintain,"service":this.service,"status":this.state})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -184,7 +183,6 @@ export class ShopaddComponent implements OnInit {
   	public rou:Router, 
   	private msg: NzMessageService,
   	private httpl:HttpService,
-  	private cookieService:CookieService,
   	private sanitizer: DomSanitizer
   ) {
   	  	this.router.queryParams.subscribe(Params=>{
@@ -195,7 +193,7 @@ export class ShopaddComponent implements OnInit {
 
   ngOnInit(): void {
   	 /*获取门店区域信息*/
-     this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/1",this.cookieService.get("token"))
+     this.httpl.httpmenderget("shopmanagemnet/getshopdistrict/1")
       .subscribe(data=>{
       	if(data.result == '0000'){
       		this.provinceData=data.data;
@@ -206,7 +204,7 @@ export class ShopaddComponent implements OnInit {
   	if(this.parmlen==1){
   		this.label='编辑';
   	/*获取门店详情*/
-     this.httpl.httpmenderget("shopmanagemnet/getshopinfo/"+this.shopid,this.cookieService.get("token"))
+     this.httpl.httpmenderget("shopmanagemnet/getshopinfo/"+this.shopid)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){

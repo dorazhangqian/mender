@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService,imgUrl} from "../../service/http/http.service";
 import {Router} from '@angular/router';
-import {CookieService} from "ngx-cookie-service";
 import { NzMessageService} from 'ng-zorro-antd';
 import 'ztree';
 import 'jquery'
@@ -22,12 +21,12 @@ export class ModellistComponent implements OnInit {
   status:string;
   imgUrl:string=imgUrl;
   nodes:any;
-  constructor(public http:HttpService,public router:Router,public cookieservice:CookieService,public message:NzMessageService) {
+  constructor(public http:HttpService,public router:Router,public message:NzMessageService) {
   }
 
   searchData(): void {
     this.loading = true;
-     this.http.httpmender("repairmanagemnet/versionlist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"brandid":this.brandid,"title":this.title,"status":this.status},this.cookieservice.get("token"))
+     this.http.httpmender("repairmanagemnet/versionlist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"brandid":this.brandid,"title":this.title,"status":this.status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -44,13 +43,13 @@ export class ModellistComponent implements OnInit {
   	 this.searchData();
   }
   add(){//新增门店
-  	this.router.navigateByUrl("home/editmodel");
+  	this.router.navigate(["home/editmodel"],{queryParams:{'brandid':this.brandid}});
   }
   EditRow(item:any):void{//编辑型号
-	  this.router.navigate(["home/editmodel"],{queryParams:{'id':item}});
+	  this.router.navigate(["home/editmodel"],{queryParams:{'id':item,'brandid':this.brandid}});
   }
   deleteRow(item:string):void{//删除型号
-  	 this.http.httpmenderdel("repairmanagemnet/deleteversion/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("repairmanagemnet/deleteversion/"+item)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
@@ -81,7 +80,7 @@ export class ModellistComponent implements OnInit {
   };
 
    getnodes(){
-  	  this.http.httpmenderget("repairmanagemnet/brandtreelist/",this.cookieservice.get("token"))
+  	  this.http.httpmenderget("repairmanagemnet/brandtreelist/")
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){      	

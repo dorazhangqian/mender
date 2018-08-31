@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from "@angular/router";
 import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,imgUrl} from "../../service/http/http.service";
-import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-editpartorder',
@@ -16,15 +15,14 @@ export class EditpartorderComponent implements OnInit {
   constructor(
   	public router:ActivatedRoute,
   	private msg: NzMessageService,
-  	private httpl:HttpService,
-  	private cookieService:CookieService) {
+  	private httpl:HttpService) {
 	  this.router.queryParams.subscribe(Params=>{
         this.orderno=Params['orderno'];
         });
   	}
   ngOnInit() {
   	 /*获取订单详情*/
-     this.httpl.httpmenderget("partsmanagemnet/partsorderdetail/"+this.orderno,this.cookieService.get("token"))
+     this.httpl.httpmenderget("partsmanagemnet/partsorderdetail/"+this.orderno)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){

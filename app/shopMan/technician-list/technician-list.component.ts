@@ -36,7 +36,7 @@ export class TechnicianListComponent implements OnInit {
     }else{
 //  	this.addbtn=false;
     }
-     this.http.httpmender("shopmanagemnet/workerinfolist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"shopid":this.shopid,"worknum":this.worknum,"workname":this.workname,"phone":this.phone},this.cookieservice.get("token"))
+     this.http.httpmender("shopmanagemnet/workerinfolist",{"currentPage":this.pageIndex,"pageSize":this.pageSize,"shopid":this.shopid,"worknum":this.worknum,"workname":this.workname,"phone":this.phone})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -59,7 +59,7 @@ export class TechnicianListComponent implements OnInit {
   	this.router.navigate(["home/techniciandetail"],{queryParams:{'id':item,'shopid':this.shopid}});
   }
   deleteRow(item:string):void{
-  	 this.http.httpmenderdel("shopmanagemnet/deleteworker/"+item,this.cookieservice.get("token"))
+  	 this.http.httpmenderdel("shopmanagemnet/deleteworker/"+item)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
@@ -77,7 +77,7 @@ export class TechnicianListComponent implements OnInit {
   	}else{
   		status='1';
   	}
-  	this.http.httpmenderput("shopmanagemnet/updateworkerstatus",{"workid":workid,"status":status},this.cookieservice.get("token"))
+  	this.http.httpmenderput("shopmanagemnet/updateworkerstatus",{"workid":workid,"status":status})
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
