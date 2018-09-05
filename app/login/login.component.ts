@@ -27,7 +27,6 @@ ngOnInit(): void {
     this.validateForm = this.fb.group({
       userName: [ '15842625530', [ Validators.required,Validators.pattern(/^1\d{10}$/) ] ],
       password: [ '123456', [ Validators.required ] ],
-      remember: [ true ]
     });
     
 }

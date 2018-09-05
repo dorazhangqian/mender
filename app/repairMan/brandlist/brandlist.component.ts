@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {HttpService,imgUrl} from "../../service/http/http.service";
 import {Router} from '@angular/router';
 import { NzMessageService} from 'ng-zorro-antd';
-import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd';
 import 'ztree';
 import 'jquery'
 declare var $: any;

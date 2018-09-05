@@ -4,6 +4,7 @@ import { NzMessageService} from 'ng-zorro-antd';
 import {HttpService,uploadurl,imgUrl} from "../../service/http/http.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploader } from 'ng2-file-upload';
+import * as $ from 'jquery';
 import {
   FormBuilder,
   FormGroup,
@@ -20,20 +21,18 @@ export class EditmodelComponent implements OnInit {
   describe:string;
   num:string;
   brandid:string;
-  colors:string;
+  colors:any=[];
   status:string='1';
   parmlen:number;
   validateForm: FormGroup;
   pagename:string;
-  versionid:number=0;
+//versionid:number=0;
   secondaryFaultList:any;
+  secondaryFaultList2:any;
   secondaryFL:string;
-  faultid:string;
-  faultpid:string;
-  ftitle:string;
-  cost:string;
-  price:string;
-  fee:string;
+  faultlist:any=[];
+  primaryFaultList:any=[];
+  firstid:any;
   constructor(
   	public router:ActivatedRoute,
   	private msg: NzMessageService,
@@ -48,11 +47,16 @@ export class EditmodelComponent implements OnInit {
         });
   	}
   ngOnInit() {
-  	  this.httpl.httpmenderget("repairmanagemnet/getfaultinfo/"+this.versionid)
+  	if(!this.id){
+  		this.id='0';
+  	}
+  	  this.httpl.httpmenderget("repairmanagemnet/getfaultinfo/"+this.id)
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == '0000'){
 				  this.secondaryFaultList=data.data.SecondaryFaultList;
+				  this.secondaryFaultList2=data.data.SecondaryFaultList;
+				  this.primaryFaultList=data.data.primaryFaultList;
       	}else{
       		this.msg.error(data.msg);
       	}
@@ -67,7 +71,7 @@ export class EditmodelComponent implements OnInit {
 						this.title=data.data.title;
 						this.describe=data.data.describe;
 						this.num=data.data.num;
-						this.colors=data.data.colors;
+						this.colors=data.data.colors.split(',');
 						this.img=this.imgUrl+data.data.img;
 						this.status=data.data.status.toString();
       	}else{
@@ -84,7 +88,7 @@ export class EditmodelComponent implements OnInit {
       describe:[this.describe, [ Validators.required ]],
       num: [ this.num, [ Validators.required ] ],
       status:[this.status,[ Validators.required ]],
-      colors:[this.colors],
+      colors:[this.colors,[ Validators.required ]],
       secondaryFL:[this.secondaryFL],
       mkey:[this.mkey],
      });
@@ -92,6 +96,13 @@ export class EditmodelComponent implements OnInit {
   
     /*提交表单*/
   submitForm(): void {
+  	let lilen=$('.li_zq').length;
+  	for(let i=0;i<lilen;i++){
+  		if($('.li_zq').eq(i).find('input:nth-child(1)').val() && $('.li_zq').eq(i).find('div:nth-child(3)>input').val()  && $('.li_zq').eq(i).find('div:nth-child(4)>input').val()){
+  			this.faultlist.push({"faultid":$('.li_zq').eq(i).find('div:nth-child(1)>div:nth-child(1)').attr('id').split(',')[0],"faultpid":$('.li_zq').eq(i).find('div:nth-child(1)>div:nth-child(1)').attr('id').split(',')[1],"title":$('.li_zq').eq(i).find('div:nth-child(1)>div:nth-child(1)').html(),"cost":$('.li_zq').eq(i).find('input:nth-child(1)').val(),"price":$('.li_zq').eq(i).find('div:nth-child(3)>input').val(),"fee":$('.li_zq').eq(i).find('div:nth-child(4)>input').val()});
+  		}
+  	}
+  	console.log(this.faultlist);
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
@@ -99,7 +110,7 @@ export class EditmodelComponent implements OnInit {
     if (this.validateForm.invalid) return;
     if(this.parmlen==2){
     /*编辑*/
-	  this.httpl.httpmender("repairmanagemnet/updateversion",{"describe":this.describe,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid,"list":JSON.parse(this.secondaryFL)})
+	  this.httpl.httpmender("repairmanagemnet/updateversion",{"version":{"describe":this.describe,"id": this.id,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors.join(','),"brandid":this.brandid},"faultlist":this.faultlist})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('修改成功!');
@@ -110,7 +121,7 @@ export class EditmodelComponent implements OnInit {
       });
     }else{   	
     /*新增*/
-	  this.httpl.httpmender("repairmanagemnet/addversion",{"describe":this.describe,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors,"brandid":this.brandid,"list":JSON.parse(this.secondaryFL)})
+	  this.httpl.httpmender("repairmanagemnet/addversion",{"version":{"describe":this.describe,"num":this.num,"status":this.status,"title":this.title,"img":this.mkey,"colors":this.colors.join(','),"brandid":this.brandid},"faultlist":this.faultlist})
       .subscribe(data=>{
       	if(data.result == "0000"){
 					this.msg.success('新增成功!');
@@ -165,5 +176,19 @@ export class EditmodelComponent implements OnInit {
   changeFile(){
   	this.picturesc=false;
   	this.img='';
+  }
+  
+  
+  
+  log(): void {
+    let newarr=[];
+    for(let i=0;i<this.firstid.length;i++){
+    	for(let j=0;j<this.secondaryFaultList2.length;j++){
+    		if(this.secondaryFaultList2[j].pid==this.firstid[i]){
+    			newarr.push(this.secondaryFaultList2[j]);
+    		}
+    	}
+    }
+    this.secondaryFaultList=newarr;
   }
 }

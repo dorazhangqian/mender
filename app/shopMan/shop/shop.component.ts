@@ -9,7 +9,6 @@ import { NzMessageService} from 'ng-zorro-antd';
   styleUrls: ['./shop.component.less']
 })
 export class ShopComponent implements OnInit {
-isVisibleMiddle=false;
   pageIndex = 1;
   pageSize = 10;
   total = 1;

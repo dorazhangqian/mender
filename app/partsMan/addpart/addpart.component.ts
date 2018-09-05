@@ -89,7 +89,6 @@ export class AddpartComponent implements OnInit {
       protect: [ this.protect, [ Validators.required ] ],
       puprice: [ this.puprice, [ Validators.required ] ],
       stock: [ this.stock, [ Validators.required ] ],
-
      });
   }
   

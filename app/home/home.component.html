@@ -66,8 +66,9 @@
 			<li nz-submenu>
 				<span title><i class="anticon anticon-form"></i><span class="nav-text">规则管理</span></span>
 				<ul>
-					<li nz-menu-item>佣金比例设置</li>
-					<li nz-menu-item>基本规则设置</li>
+					<li nz-menu-item (click)="gorouter('home/banner')">Banner设置</li>
+					<li nz-menu-item (click)="gorouter('home/distri')">分销比例设置</li>
+					<li nz-menu-item (click)="gorouter('home/basic')">基本规则设置</li>
 				</ul>
 			</li>
 		</ul>
@@ -156,7 +157,7 @@
 							</div>
 							<div nz-menu class="width-sm">
 								<div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-user mr-sm"></i>个人中心</div>
-								<div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-setting mr-sm"></i>设置</div>
+								<div nz-menu-item><i class="anticon anticon-setting mr-sm"></i>修改密码</div>
 								<li nz-menu-divider></li>
 								<div nz-menu-item (click)="logout()"><i class="anticon anticon-setting mr-sm"></i>退出登录</div>
 							</div>

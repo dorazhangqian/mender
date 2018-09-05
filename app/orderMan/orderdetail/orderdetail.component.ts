@@ -69,20 +69,26 @@ export class OrderdetailComponent implements OnInit {
           }else{
           	this.paytype='线下支付';
           }
+          
           this.memberphone=data.data.orderDetail.memberphone;
           this.orderFaultList=data.data.orderFaultList;
           this.orderTransferList=data.data.orderTransferList;
+          if(data.data.workerPartsUse){
           this.wpuorderno=data.data.workerPartsUse.orderno;
 					this.wpuworkername=data.data.workerPartsUse.workername;
 					this.wpudesc=data.data.workerPartsUse.desc;
 					this.wpuaddtime=data.data.workerPartsUse.addtime;
-					this.mcorderno=data.data.memberComplaint.orderno;
-					this.mcaddtime=data.data.memberComplaint.addtime;
-					this.mcreason=data.data.memberComplaint.reason;
-				  this.mcdealtime=data.data.memberComplaint.dealtime;
-				  this.mcresult=data.data.memberComplaint.result;
-				  this.mcmembername=data.data.memberComplaint.membername;
-				  this.mcworkername=data.data.memberComplaint.workername;
+					}
+					if(data.data.memberComplaint){
+						this.mcorderno=data.data.memberComplaint.orderno;
+						this.mcaddtime=data.data.memberComplaint.addtime;
+						this.mcreason=data.data.memberComplaint.reason;
+					  this.mcdealtime=data.data.memberComplaint.dealtime;
+					  this.mcresult=data.data.memberComplaint.result;
+					  this.mcmembername=data.data.memberComplaint.membername;
+					  this.mcworkername=data.data.memberComplaint.workername;
+					}
+					
       	}else{
       		this.msg.error(data.msg);
       	}

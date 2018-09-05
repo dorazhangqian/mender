@@ -156,7 +156,7 @@ export class ShopaddComponent implements OnInit {
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
-					this.msg.success(data.msg);
+					this.msg.success('修改成功!');
 					this.rou.navigateByUrl("home/shop");
       	}else{
       		this.msg.error(data.msg);
@@ -168,7 +168,7 @@ export class ShopaddComponent implements OnInit {
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
-					this.msg.success(data.msg);
+					this.msg.success('新增成功!');
 					this.rou.navigateByUrl("home/shop");
       	}else{
       		this.msg.error(data.msg);

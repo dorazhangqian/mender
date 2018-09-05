@@ -40,6 +40,12 @@ import { ModellistComponent } from './repairMan/modellist/modellist.component';
 import { EditbrandComponent } from './repairMan/editbrand/editbrand.component';
 import { EditfaultComponent } from './repairMan/editfault/editfault.component';
 import { EditmodelComponent } from './repairMan/editmodel/editmodel.component';
+import { BasiclistComponent } from './ruleMan/basiclist/basiclist.component';
+import { DistributionratiolistComponent } from './ruleMan/distributionratiolist/distributionratiolist.component';
+import { BannerComponent } from './ruleMan/banner/banner.component';
+import { EdituserComponent } from './sysMan/user/edituser/edituser.component';
+import { EditdepartComponent } from './sysMan/depart/editdepart/editdepart.component';
+
 const routes:Routes=[
 {path:"",redirectTo:"login",pathMatch:"full"},
 {path:"login",component:LoginComponent},
@@ -60,9 +66,14 @@ const routes:Routes=[
 	{path:"mention",component:MentionComponent},
 	{path:"antv",component:AntvComponent},
 	//系统管理
+	//系统管理-user
 	{path:"user",component:UserComponent},
+	{path:"edituser",component:EdituserComponent},
 	{path:"role",component:RoleComponent},
+	//系统管理-depart
 	{path:"depart",component:DepartComponent},
+	{path:"editdepart",component:EditdepartComponent},
+	
 	{path:"menu",component:MenuComponent},
 	{path:"notice",component:NoticeComponent},
 	//门店管理
@@ -88,6 +99,11 @@ const routes:Routes=[
 	{path:"editbrand",component:EditbrandComponent},
 	{path:"editfault",component:EditfaultComponent},
 	{path:"editmodel",component:EditmodelComponent},
+	//规则管理
+	{path:"banner",component:BannerComponent},
+	{path:"basic",component:BasiclistComponent},
+	{path:"distri",component:DistributionratiolistComponent},
+	
 	]
 }
 ]

@@ -54,6 +54,11 @@ import { ModellistComponent } from './repairMan/modellist/modellist.component';
 import { EditbrandComponent } from './repairMan/editbrand/editbrand.component';
 import { EditfaultComponent } from './repairMan/editfault/editfault.component';
 import { EditmodelComponent } from './repairMan/editmodel/editmodel.component';
+import { BasiclistComponent } from './ruleMan/basiclist/basiclist.component';
+import { DistributionratiolistComponent } from './ruleMan/distributionratiolist/distributionratiolist.component';
+import { BannerComponent } from './ruleMan/banner/banner.component';
+import { EdituserComponent } from './sysMan/user/edituser/edituser.component';
+import { EditdepartComponent } from './sysMan/depart/editdepart/editdepart.component';
 
 registerLocaleData(zh);
 
@@ -98,7 +103,12 @@ registerLocaleData(zh);
     ModellistComponent,
     EditbrandComponent,
     EditfaultComponent,
-    EditmodelComponent
+    EditmodelComponent,
+    BasiclistComponent,
+    DistributionratiolistComponent,
+    BannerComponent,
+    EdituserComponent,
+    EditdepartComponent
   ],
   imports: [
     BrowserModule,

@@ -53,7 +53,7 @@ export class ModellistComponent implements OnInit {
       .subscribe(data=>{
       	console.log(data);
       	if(data.result == "0000"){
-					this.message.success(data.msg);
+					this.message.success('删除成功!');
 					this.searchData();
       	}else{
       		this.message.error(data.msg);
